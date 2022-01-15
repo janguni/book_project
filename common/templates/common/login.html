@@ -1,19 +1,15 @@
-{% extends "common/base.html" %}
-
 {% block content %}
-
-<div class="container">
-    <h1>login</h1>
-
-    <form action="">
+<h1>login</h1>
+<div class="auth">
+    <form action="{% url 'common:login' %}" method="post">
+        {% csrf_token %}
         Username :
-        <br>
-        <input name="username" type="text">
-        <br>
-        Password :
-        <input name="password" type="password">
-        <br><br>
+        <input type="input" name="username"><br>
+        Password : 
+        <input type="password" name="password"><br>
+        <input type="submit" value="로그인">
     </form>
 </div>
+
 
 {% endblock %}
