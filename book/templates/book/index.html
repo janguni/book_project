@@ -7,6 +7,7 @@
 <navbar>
     {% if user.is_authenticated %}
         <p> 안녕하세요, {{user.username}}님 </p>
+        <li><a href = "{% url 'profile' user.id%}">내 프로필</a>
         <a href ="{% url 'account_logout' %}">로그아웃</a>
     {% else %}
         <p> 로그아웃된 상태입니다.</p>
