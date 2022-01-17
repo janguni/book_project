@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
+from book.views import CustomPasswordChangeView
 
 urlpatterns = [
     # admin
@@ -22,5 +25,11 @@ urlpatterns = [
     # book
     path('',include('book.urls')),
     # allauth
+    path(
+        'password/change/',
+        CustomPasswordChangeView.as_view(),
+        name='account_password_change',),
     path('accounts/',include('allauth.urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
