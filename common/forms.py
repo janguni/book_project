@@ -1,43 +1,27 @@
-from django.contrib.auth import forms as admin_forms
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
-from django import forms as django_forms
-from django.core.exceptions import ValidationError
-
-User = get_user_model()
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import CustomUser
 
 
-class UserChangeForm(admin_forms.UserChangeForm):
-    class Meta(admin_forms.UserChangeForm.Meta):
-        model = User
+class SignupForm(UserCreationForm):
+  class Meta:
+    model = CustomUser
+    fields = ['username', 'password', 'password2', 'email', 'nickname']
 
+    widgets = {
+            'username' : forms.TextInput(attrs={'placeholder': '아이디'}),
+            'password' : forms.PasswordInput(attrs={'placeholder': '비밀번호'}),
+            'password2' : forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),
+            'email' : forms.TextInput(attrs={'placeholder': '이메일 주소'}),
+            'nickname' : forms.TextInput(attrs={'placeholder': '닉네임'}),       
+        }
 
-class UserCreationForm(admin_forms.UserCreationForm):
-    error_message = admin_forms.UserCreationForm.error_messages.update(
-        {"duplicate_username": _("This username has already been taken.")}
-    )
-    class Meta(admin_forms.UserCreationForm.Meta):
-        model = User
-
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        try:
-            User.objects.get(username=username)
-        except User.DoesNotExist:
-            return username
-        raise ValidationError(self.error_messages["duplicate_username"])
-
-class SignUpForm(django_forms.ModelForm) :
-    class Meta :
-        model = User
-        fields = ['username', 'email', 'nickname', 'password', 'password2']
-
-        widgets = {
-            'username' : django_forms.TextInput(attrs={'placeholder': '아이디'}),
-            'email' : django_forms.TextInput(attrs={'placeholder': '이메일 주소'}),
-            'nickname' : django_forms.TextInput(attrs={'placeholder': '닉네임'}),            
-            'password' : django_forms.PasswordInput(attrs={'placeholder': '비밀번호'}),
-            'password2' : django_forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),
+    labels = {
+            'username': 'ID',
+            'password': '비밀번호',
+            'password2': '비밀번호 확인',
+            'email': 'EMAIL',
+            'nickname' : '닉네임',
         }
 
     def save(self, commit=True) :
@@ -46,3 +30,25 @@ class SignUpForm(django_forms.ModelForm) :
         if commit :
             user.save()
         return user
+
+    # id 중복 검사 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if CustomUser.objects.filter(username=username).exists():
+            raise forms.ValidationError('아이디가 이미 사용중입니다')
+        return username
+
+    # password와 password2의 값이 일치하는지 유효성 검사
+    def clean_password2(self):
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['password2']
+        if password1 != password2:
+            raise forms.ValidationError('비밀번호와 비밀번호 확인란의 값이 일치하지 않습니다')
+        return password2
+    
+    def signup(self):
+        if self.is_valid():
+            return CustomUser.objects.create_user(
+                username=self.cleaned_data['username'],
+                password=self.cleaned_data['password2']
+            )
