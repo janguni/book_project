@@ -100,7 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'common.User'
+AUTH_USER_MODEL = 'common.CustomUser'
 
 
 # Internationalization

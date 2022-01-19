@@ -1,30 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from .forms import SignupForm
 
 def main(request) :
     return render(request, 'common/main.html')
 
-def signup(request) :
-    if request.method == 'GET'
+def signup(request) : 
+    if request.method == 'GET' :
+        form = SignupForm()
+        return render(request, 'common/signup.html', {'form': form})
+   
+    elif request.method == 'POST' :
+        form  = SignupForm(request.POST)
+
+        if form.is_valid() :
+            form.signup()
+            return render(request, 'common/signup_success.html')
         return render(request, 'common/signup.html')
 
-    elif request.method == 'POST' :
-        username = request.POST('username')
-        password = request.POST('password')
-        password2 = request.POST('password2')
-        print(username, password, password2)
-        user = User()
-        user.username = username
-        user.password = password
-        user.save()
-        return render(request, 'common/signup_success.html')
-
-    else :
-        context_values = {'form':'This is form'}
-        return render(request, 'common/signup.html', context_values)
-
-       
+     
 def login(request) :
     if request.method == 'GET' :
         return render(request, 'common/login.html')

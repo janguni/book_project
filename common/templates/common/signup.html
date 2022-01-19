@@ -5,11 +5,12 @@
         {% csrf_token %}
         {% for field in form %}
         <div class="fieldWrapper">
-            {{ field.errors }}
+            {{ field.label }}
             {{ field }}
         </div>
         {% endfor %}
-        <input type="submit" value="회원가입" >
+        <input type="submit" value="Sign up" >
+        
     </form>
 </div>
 
