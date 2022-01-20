@@ -12,29 +12,39 @@ def main(request) :
 def signup(request) : 
     if request.method == 'GET' :
         form = SignupForm()
-        return render(request, 'common/signup.html', {'form': form})
    
     elif request.method == 'POST' :
-        
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-        re_password = request.POST.get('re_password', None)
-        email = request.POST.get('email', None)
-        nickname = request.POST.get('nickname', None)
+        form = SignupForm(request.POST)
+        if form.is_valid() :
+            user = form.save(commit = False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            return render(request, 'common/signup_success.html')
+    return render(request, 'common/signup.html', {'form': form})
 
-        res_data={}
+        # username = request.POST.get('username', None)
+        # password = request.POST.get('password', None)
+        # re_password = request.POST.get('re_password', None)
+        # email = request.POST.get('email', None)
+        # nickname = request.POST.get('nickname', None)
 
-        if password != re_password :
-            res_data['error'] = "비밀번호가 다릅니다!"
-        else :
-            form = CustomUser (
-                username = username,
-                password = make_password(password),
-                email = email,
-                nickname = nickname,
-            )
-            form.save()
-        return render(request, 'common/signup_success.html', res_data)
+        # res_data={}
+
+        # if not(username and password and re_password and email and nickname) :
+        #     res_data['error'] = "모든 값을 입력해야 합니다."
+
+        # elif password != re_password :
+        #     res_data['error'] = "비밀번호가 다릅니다!"
+        # else :
+        #     form = CustomUser (
+        #         username = username,
+        #         password = make_password(password),
+        #         email = email,
+        #         nickname = nickname,
+        #     )
+        #     form.save()
+        #     return render(request, 'common/signup_success.html')
+        # return render(request, 'common/signup.html',res_data)
 
      
 def loginview(request) :
