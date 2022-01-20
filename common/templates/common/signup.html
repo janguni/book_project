@@ -8,9 +8,6 @@
         <label for = "{{fied.id_for_label}}">{{field.label}}</label><br>
         <input type = "{{field.field.widget.input_type}}" class = "form-control" id = "{{field.id_for_label}}"
         placeholder = "{{field.label}}" name = "{{field.name}}">
-        {% if field == username %}
-        <button onclick={{}}>로그인</button>
-
     </div>
     {% if field.errors %}
     <span style = "color:red">{{field.errors}}</span>
