@@ -8,21 +8,19 @@ class SignupForm(UserCreationForm):
     model = CustomUser
     fields = ['username', 'password', 'password2', 'email', 'nickname']
 
-    widgets = {
-            'username' : forms.TextInput(attrs={'placeholder': '아이디'}),
-            'password' : forms.PasswordInput(attrs={'placeholder': '비밀번호'}),
-            'password2' : forms.PasswordInput(attrs={'placeholder': '비밀번호 확인'}),
-            'email' : forms.TextInput(attrs={'placeholder': '이메일 주소'}),
-            'nickname' : forms.TextInput(attrs={'placeholder': '닉네임'}),       
-        }
+    # widgets = {
+    #         'username' : forms.TextInput(attrs={'placeholder': '아이디'}),
+    #         'password' : forms.PasswordInput(attrs={'placeholder': '비밀번호'}),
+    #         'email' : forms.TextInput(attrs={'placeholder': '이메일 주소'}),
+    #         'nickname' : forms.TextInput(attrs={'placeholder': '닉네임'}),       
+    #     }
 
-    labels = {
-            'username': 'ID',
-            'password': '비밀번호',
-            'password2': '비밀번호 확인',
-            'email': 'EMAIL',
-            'nickname' : '닉네임',
-        }
+    # labels = {
+    #         'username': 'ID',
+    #         'password': '비밀번호',
+    #         'email': 'EMAIL',
+    #         'nickname' : '닉네임',
+    #     }
 
     def save(self, commit=True) :
         user = super().save(commit=False)

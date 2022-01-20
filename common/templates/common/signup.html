@@ -3,14 +3,33 @@
 <div class="auth">
     <form action="{% url 'common:signup' %}" method="post">
         {% csrf_token %}
-        {% for field in form %}
-        <div class="fieldWrapper">
-            {{ field.label }}
-            {{ field }}
+        <div class="signupform">
+            <label for="username">ID 입력</label>
+            <input type="text" class="signupform" id="username" name="username" placeholder="ID">
         </div>
-        {% endfor %}
-        <input type="submit" value="Sign up" >
+
+        <div class="signupform">
+            <label for="password">비밀번호 입력</label>
+            <input type="password" class="signupform" id="password" name="password" placeholder="비밀번호">
+        </div>
+            
+        <div class="signupform">
+            <label for="re_password">비밀번호 확인</label>
+            <input type="password" class="signupform" id="re_password" name="re_password" placeholder="비밀번호 확인">
+            {{error}}
+        </div>
+
+        <div class="signupform">
+            <label for="email">이메일 입력</label>
+            <input type="email" class="signupform" id="email" name="email" placeholder="email"> 
+        </div>
+
+        <div class="signupform">
+            <label for="nickname">별명 입력</label>
+            <input type="text" class="signupform" id="nickname" name="nickname" placeholder="nickname"> 
+        </div>
         
+        <input type="submit" value="Sign up" >       
     </form>
 </div>
 
