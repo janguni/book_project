@@ -11,8 +11,14 @@
         <a href ="{% url 'account_logout' %}">로그아웃</a>
     {% else %}
         <p> 로그아웃된 상태입니다.</p>
-        <a href="{% url 'account_login' %}">로그인</a>
-        <a href="{% url 'account_signup' %}">회원가입</a><br>
+        {% block content %}
+
+            <a href="{% url 'login' %}">로그인</a>
+            <a href="{% url 'signup' %}">회원가입</a><br>
+
+        {% endblock %}
+        
+        <br>
         <a href="{% provider_login_url 'kakao' %}">카카오 로그인</a>
         <a href="{% provider_login_url 'google'%}">구글 로그인</a>
         <a href="{% provider_login_url 'naver'%}">네이버 로그인</a>
