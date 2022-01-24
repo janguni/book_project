@@ -1,0 +1,31 @@
+{% block content %}
+<h1>회원가입</h1>
+<hr>
+<form action="{% url 'common:signup' %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class = "form-group">
+        <label for = "{{fied.id_for_label}}">{{field.label}}</label><br>
+        <input type = "{{field.field.widget.input_type}}" class = "form-control" id = "{{field.id_for_label}}"
+        placeholder = "{{field.label}}" name = "{{field.name}}">
+    </div>
+    {% if field.errors %}
+    <span style = "color:red">{{field.errors}}</span>
+    {% endif %}
+    {% endfor %}
+    <br>
+    <button type = "submit" class = "btn btn-primary">회원가입</button> 
+</form>
+
+<!-- <form action="{% url 'common:signup' %}" method="post">
+    {{form.as_p}}
+    {% csrf_token %}
+
+    <input type="submit" value="Sign up" >
+
+</form> -->
+
+<div class="auth.link">
+    <a href="{% url 'common:login' %}">Login</a>
+</div>
+{% endblock content %}
