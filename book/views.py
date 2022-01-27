@@ -13,8 +13,8 @@ from allauth.account.views import PasswordChangeView
 from book.models import User
 
 # main
-def index(request):
-    return render(request,'book/index.html')
+def main(request):
+    return render(request,'book/main.html')
 
 # account
 def signup(request) : 
@@ -67,10 +67,10 @@ def loginview(request) :
         if user is not None :
             login(request, user)
             # 로그인 성공
-            return render(request, 'book/index.html')
+            return render(request, 'book/main.html')
         else :
             # 로그인 실패
-            return render(request, 'login.html', {'error': '아이디 혹은 패스워드가 올바르지 않습니다.'})
+            return render(request, 'account/login.html', {'error': '아이디 혹은 패스워드가 올바르지 않습니다.'})
     else : 
         return render(request, 'account/login.html')
 
@@ -96,7 +96,7 @@ class ProfileSetView(LoginRequiredMixin,UpdateView):
         return self.request.user
     
     def get_success_url(self) :
-        return reverse('index')
+        return reverse('main')
 
 class ProfileUpdateView(LoginRequiredMixin,UpdateView):
     model = User

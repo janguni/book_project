@@ -1,0 +1,22 @@
+{% extends 'book/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+{% block header %}
+    <header class="site-header navbar">
+    <div class="content max-width">
+        {% if user.is_authenticated %}
+            <p> 안녕하세요, {{user.nickname}}님 </p>
+            <a href="{% url 'profile' user.id %}">내 프로필 </a>
+            <a href="{% url 'account_logout' %}">로그아웃</a>
+        {% else %}
+            <p> 로그아웃된 상태입니다.</p>
+            <a href="{% url 'login' %}">로그인</a>
+            <a href="{% url 'signup' %}">회원가입</a>
+        {% endif %}
+        
+    </div>
+    </header>
+{% endblock header %}
+    

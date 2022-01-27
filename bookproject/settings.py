@@ -69,7 +69,7 @@ ROOT_URLCONF = 'bookproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS' : [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,9 +131,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
-MEDIA_URL = "/uploads/"
 STATIC_ROOT = os.path.join(BASE_DIR,"static")
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR,'book','static'),
+# ]
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -157,9 +161,9 @@ AUTHENTICATION_BACKENDS = [
 
 # django-account Settings
 ACCOUNT_SINGUP_REDIRECT_URL = 'profile-set'
-#ACCOUNT_SIGNUP_REDIRECT_URL = 'index'
-LOGIN_REDIRECT_URL = 'index'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'index'
+#ACCOUNT_SIGNUP_REDIRECT_URL = 'main'
+LOGIN_REDIRECT_URL = 'main'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'main'
 ACCOUNT_LOGOU_ON_GET = True
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_USERNAME_REQUIRED = True
