@@ -19,7 +19,7 @@
       <h2>로그인</h2>
         {% csrf_token %}
         <div class="idForm">
-          <input type="text" name = "username" placeholder="ID" >
+          <input type="text" name= "username" placeholder="ID" >
         </div>
         <div class="passForm">
           <input type="password" name ="password" placeholder="PW" > 
@@ -36,6 +36,7 @@
       <div class="bottomText">
         Don't have an account? <a href="{% url 'signup' %}">sign up</a>
       </div>
+      <p><a href="{% url 'account_reset_password'%}">비밀번호 찾기</a></p>
       <div class="seperator"><b>or</b></div>
       <p>Easier Sign in</p>
       <!--Social login buttons-->
