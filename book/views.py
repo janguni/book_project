@@ -74,6 +74,7 @@ def loginview(request) :
     else : 
         return render(request, 'account/login.html')
 
+
 # profile
 class ProfileView(DetailView):
     model = User

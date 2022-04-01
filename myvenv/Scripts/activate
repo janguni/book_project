@@ -37,11 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-<<<<<<< HEAD
 VIRTUAL_ENV="C:\Users\minhy\Desktop\졸업 프로젝트\book_project\myvenv"
-=======
-VIRTUAL_ENV="C:\Users\minhy\Desktop\졸프\bookproject\myvenv"
->>>>>>> origin/yoonju
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

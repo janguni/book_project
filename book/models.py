@@ -12,7 +12,6 @@ class User(AbstractUser):
         max_length=15,
         unique=True,
         null=True,
-        validators=[validate_no_special_characters],
         error_messages={'unique':'이미 사용중인 닉넥임입니다'},
         verbose_name="별명",
     )
