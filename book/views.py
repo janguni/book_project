@@ -1,8 +1,10 @@
+import csv
+import pandas as pd
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
-from django.contrib.auth.hashers import make_password
+# from django.http import HttpResponse
+# from django.contrib.auth.hashers import make_password
 from .forms import SignupForm
 from django.views.generic import(
     DetailView,UpdateView
@@ -10,7 +12,18 @@ from django.views.generic import(
 from book.forms import ProfileForm
 from braces.views import LoginRequiredMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User
+from book.models import User, Book
+
+# with open('./bookList.csv','r',encoding="UTF-8") as f:
+#     dr = csv.DictReader(f)
+#     s = pd.DataFrame(dr)
+# ss = []
+# for i in range(len(s)):
+#     st = (s['book_isbn'][i], s['book_img_url'][i], s['book_title'][i],s['book_author'][i],s['book_publisher'][i],s['genre_name'][i])
+#     ss.append(st)
+# for i in range(len(s)):
+#     Book.objects.create(book_isbn=ss[i][0], book_img_url=ss[i][1], book_title=ss[i][2],book_author=ss[i][3],book_publisher=ss[i][4],genre_name=ss[i][5])
+
 
 # main
 def main(request):
@@ -74,6 +87,7 @@ def loginview(request) :
     else : 
         return render(request, 'account/login.html')
 
+
 # profile
 class ProfileView(DetailView):
     model = User
@@ -112,3 +126,4 @@ class ProfileUpdateView(LoginRequiredMixin,UpdateView):
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView) :
     def get_success_url(self):
         return reverse('profile',kwargs=({'user_id':self.request.user.id})) 
+
