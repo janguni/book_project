@@ -1,2 +1,7 @@
 django-pandas
 beautifulsoup4
+django-widget-tweaks
+django-allauth
+django-braces
+Pillow
+django-import-export

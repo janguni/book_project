@@ -24,3 +24,17 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    
+
+class Book(models.Model):
+    book_isbn = models.CharField(max_length=200)
+    book_img_url = models.URLField()
+    book_title = models.CharField(max_length=255)
+    book_author = models.CharField(max_length=100)
+    book_publisher = models.CharField(max_length=100)
+    genre_name = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'bookList.csv'
+    

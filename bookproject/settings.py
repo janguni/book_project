@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'book',
     
     'widget_tweaks',
+    'import_export',
+    
     
     'allauth',
     'allauth.account',
