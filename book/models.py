@@ -25,3 +25,15 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Book(models.Model):
+    id = models.IntegerField(primary_key=True)
+    img = models.CharField(max_length=128)
+    title = models.CharField(max_length=50)
+    author = models.CharField(max_length=20)
+    publisher = models.CharField(max_length=20)
+    genre = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.title
