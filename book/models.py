@@ -33,7 +33,7 @@ class Book(models.Model):
     book_title = models.CharField(max_length=255)
     book_author = models.CharField(max_length=100)
     book_publisher = models.CharField(max_length=100)
-    genre_name = models.CharField(max_length=50)
+    genre_name = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'bookList.csv'
