@@ -35,6 +35,21 @@ class Book(models.Model):
     book_publisher = models.CharField(max_length=100)
     genre_name = models.CharField(max_length=50)
 
+
     class Meta:
         db_table = 'bookList.csv'
+
+    def get_absolute_url(self):
+        return f'/book/{self.book_isbn}/'
+
+class WishBookList(models.Model):
+    user_id= models.ForeignKey(
+        "User", related_name="wish_user", on_delete=models.CASCADE, null=True)
+    book_id= models.ForeignKey(
+        "Book", related_name="wish_book", on_delete=models.CASCADE, null=True)
+    #count = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'[{self.pk}] {self.user_id} like {self.book_id}'
+    
     
