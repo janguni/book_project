@@ -24,5 +24,12 @@
         <form action="{% url 'search' %}" method="GET">
             <input type="search" name="q" placeholder="Search">
         </form>
+    </div>
+    <div class="wishList">
+        <form action="{% url 'profile-wishList' %}" method="GET">
+            <input type="submit" value='위시리스로 가기'>
+        </form>
+    </div>
+
 {% endblock header %}
     

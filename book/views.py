@@ -1,19 +1,23 @@
 import csv
+from re import template
 import pandas as pd
 from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
+
+import book
 # from django.http import HttpResponse
 # from django.contrib.auth.hashers import make_password
 from .forms import SignupForm
 from django.views.generic import(
-    DetailView,UpdateView
+    DetailView,UpdateView,ListView
 )
 from book.forms import ProfileForm
 from braces.views import LoginRequiredMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User, Book
+from book.models import User, Book, WishBookList
+
 
 # with open('./bookList.csv','r',encoding="UTF-8") as f:
 #     dr = csv.DictReader(f)
@@ -110,7 +114,53 @@ def search(request) :
         search_books = Book.objects.filter(Q(book_title__icontains = searchKey))
 
         return render(request,'book/search.html', {'search_books': search_books})
-
+ 
     else:
         return render(request, 'book/main.html') 
-        
+
+
+class BookList(ListView):
+    model = Book
+    template_name = 'book/book_list.html'
+
+
+def bookDetail(request,book_isbn):
+    book = Book.objects.get(book_isbn=book_isbn)
+
+    return render(
+        request,
+        'book/book_detail.html',
+        {
+            'book': book,
+        }
+    )
+
+
+def addWishList(request,book_isbn):
+    user= request.user
+    book = Book.objects.get(book_isbn=book_isbn)
+    wish_book = WishBookList(user_id=user, book_id=book)
+    WishBookList.save(wish_book)
+    
+    return render(
+        request,
+        'book/book_detail.html',
+        {
+            'book': book,
+        }
+    )
+
+def wishListView(request):
+    user = request.user
+    user_wishList = WishBookList.objects.filter(user_id=user)
+
+
+
+    return render(
+        request,
+        'profile/profile_wishList.html',
+        {
+            'wishList' : user_wishList
+        }
+    )
+
