@@ -8,11 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\minhy\Desktop\졸업 프로젝트\book_project\myvenv
-=======
-set VIRTUAL_ENV=C:\Users\minhy\Desktop\졸프\bookproject\myvenv
->>>>>>> origin/yoonju
 
 if not defined PROMPT set PROMPT=$P$G
 

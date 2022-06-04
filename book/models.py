@@ -12,7 +12,6 @@ class User(AbstractUser):
         max_length=15,
         unique=True,
         null=True,
-        validators=[validate_no_special_characters],
         error_messages={'unique':'이미 사용중인 닉넥임입니다'},
         verbose_name="별명",
     )
@@ -26,4 +25,31 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    
 
+class Book(models.Model):
+    book_isbn = models.CharField(max_length=200)
+    book_img_url = models.URLField()
+    book_title = models.CharField(max_length=255)
+    book_author = models.CharField(max_length=100)
+    book_publisher = models.CharField(max_length=100)
+    genre_name = models.CharField(max_length=50)
+
+
+    class Meta:
+        db_table = 'bookList.csv'
+
+    def get_absolute_url(self):
+        return f'/book/{self.book_isbn}/'
+
+class WishBookList(models.Model):
+    user_id= models.ForeignKey(
+        "User", related_name="wish_user", on_delete=models.CASCADE, null=True)
+    book_id= models.ForeignKey(
+        "Book", related_name="wish_book", on_delete=models.CASCADE, null=True)
+    #count = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f'[{self.pk}] {self.user_id} like {self.book_id}'
+    
+    

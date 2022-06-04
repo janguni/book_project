@@ -1,22 +1,41 @@
+import csv
+from re import template
+import pandas as pd
+from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
-from django.contrib.auth.hashers import make_password
+from django import forms
+
+import book
+# from django.http import HttpResponse
+# from django.contrib.auth.hashers import make_password
 from .forms import SignupForm
 from django.views.generic import(
-    DetailView,UpdateView
+    DetailView,UpdateView,ListView
 )
 from book.forms import ProfileForm
 from braces.views import LoginRequiredMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User
+from book.models import User, Book, WishBookList
+
+
+# with open('./bookList.csv','r',encoding="UTF-8") as f:
+#     dr = csv.DictReader(f)
+#     s = pd.DataFrame(dr)
+# ss = []
+# for i in range(len(s)):
+#     st = (s['book_isbn'][i], s['book_img_url'][i], s['book_title'][i],s['book_author'][i],s['book_publisher'][i],s['genre_name'][i])
+#     ss.append(st)
+# for i in range(len(s)):
+#     Book.objects.create(book_isbn=ss[i][0], book_img_url=ss[i][1], book_title=ss[i][2],book_author=ss[i][3],book_publisher=ss[i][4],genre_name=ss[i][5])
+
 
 # main
 def main(request):
     return render(request,'book/main.html')
 
-# account
+# account/signup
 def signup(request) : 
     if request.method == 'GET' :
         form = SignupForm()
@@ -30,34 +49,10 @@ def signup(request) :
             return render(request, 'account/signup_success.html')
     return render(request, 'account/signup.html', {'form': form})
 
-        # username = request.POST.get('username', None)
-        # password = request.POST.get('password', None)
-        # re_password = request.POST.get('re_password', None)
-        # email = request.POST.get('email', None)
-        # nickname = request.POST.get('nickname', None)
-
-        # res_data={}
-
-        # if not(username and password and re_password and email and nickname) :
-        #     res_data['error'] = "모든 값을 입력해야 합니다."
-
-        # elif password != re_password :
-        #     res_data['error'] = "비밀번호가 다릅니다!"
-        # else :
-        #     form = CustomUser (
-        #         username = username,
-        #         password = make_password(password),
-        #         email = email,
-        #         nickname = nickname,
-        #     )
-        #     form.save()
-        #     return render(request, 'common/signup_success.html')
-        # return render(request, 'common/signup.html',res_data)
-
-     
+# account/login    
 def loginview(request) :
     if request.method == 'GET' :
-        return render(request, 'account/login.html')
+            return render(request, 'account/login.html')
 
     elif request.method == 'POST' :
         username = request.POST.get('username')
@@ -70,7 +65,7 @@ def loginview(request) :
             return render(request, 'book/main.html')
         else :
             # 로그인 실패
-            return render(request, 'account/login.html', {'error': '아이디 혹은 패스워드가 올바르지 않습니다.'})
+            return render(request, 'account/login.html', {'error': '아이디 또는 비밀번호를 확인하세요!'})
     else : 
         return render(request, 'account/login.html')
 
@@ -112,3 +107,79 @@ class ProfileUpdateView(LoginRequiredMixin,UpdateView):
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView) :
     def get_success_url(self):
         return reverse('profile',kwargs=({'user_id':self.request.user.id})) 
+
+def search(request) :
+    if request.method == "GET":
+        searchKey = request.GET['q']
+
+        search_books = Book.objects.filter(Q(book_title__icontains = searchKey))
+
+        return render(request,'book/search.html', {'search_books': search_books})
+ 
+    else:
+        return render(request, 'book/main.html') 
+
+
+class BookList(ListView):
+    model = Book
+    template_name = 'book/book_list.html'
+
+
+def bookDetail(request,book_isbn):
+    user = request.user
+    book = Book.objects.get(book_isbn=book_isbn)
+
+    try:
+        wishlist = WishBookList.objects.get(user_id=user,book_id=book) 
+        overlap=True
+    except:
+        overlap=False
+
+
+    return render(
+        request,
+        'book/book_detail.html',
+        {
+            'book': book,
+            'wishList': WishBookList,
+            'overlap' : overlap
+        }
+    )
+
+
+def addWishList(request, book_isbn):
+    user = request.user
+    book = Book.objects.get(book_isbn=book_isbn)
+    if request.POST.get('wish-cancle') == None:
+        wish_book = WishBookList(user_id=user, book_id=book)
+        WishBookList.save(wish_book)
+        overlap=True
+
+    else:
+        wish_list = WishBookList.objects.get(user_id=user, book_id=book)
+        wish_list.delete()
+        overlap=False
+
+    
+    return render(
+        request,
+        'book/book_detail.html',
+        {
+            'book': book,
+            'overlap': overlap
+        }
+    )
+
+def wishListView(request):
+    user = request.user
+    user_wishList = WishBookList.objects.filter(user_id=user)
+
+
+    return render(
+        request,
+        'profile/profile_wishList.html',
+        {
+            'wishList' : user_wishList
+        }
+    )
+

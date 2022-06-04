@@ -14,18 +14,23 @@
   </head>
   
   <body width="100%" height="100%">
-    
-    <form action="{% url 'login' %}" method="post" class="loginForm">  
+  
+    <form action="{% url 'login' %}" method="POST" class="loginForm">  
       <h2>로그인</h2>
-        {% csrf_token %}
-        <div class="idForm">
-          <input type="text" name= "username" placeholder="ID" >
-        </div>
-        <div class="passForm">
-          <input type="password" name ="password" placeholder="PW" > 
-        </div>
-          <input type="submit" class="btn" value="로그인">
-        
+      {% csrf_token %}
+      {% if error %}
+        <span style = "color:red">{{error}}</span>
+      {% endif %}
+      <div class="idForm">
+        <input type="text" class="id" name = "username" placeholder="ID" >
+      </div>
+      <div class="passForm">
+        <input type="password" class="pw" name ="password" placeholder="PW" > 
+      </div>
+      <button type="submit" class="btn" value="로그인" >로그인</button>
+
+    
+  
       
       <!--
         let button = () => {
@@ -43,8 +48,8 @@
       <div class="social-icon">
 
         <!--네이버 카카오 아이콘 없음ㅜㅜ-->
-        <button type="button" onclick = "location.href = '{% provider_login_url 'naver' %}' "><i class="fab fa-neos"></i></button>
-        <button type="button" onclick = "location.href = '{% provider_login_url 'kakao' %}' "><i class="fab fa-kickstarter-k"></i></button>
+        <button type="button" onclick = "location.href = '{% provider_login_url 'naver' %}' "><i class="fab fa-neos" ></i></button>
+        <button type="button" onclick = "location.href = '{% provider_login_url 'kakao' %}' "><i class="fab fa-kickstarter-k" ></i></button>
         <button type="button" onclick = "location.href = '{% provider_login_url 'google' %}' "><i class="fab fa-google"></i></button>
         
       </div>

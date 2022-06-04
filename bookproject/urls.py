@@ -24,7 +24,7 @@ urlpatterns = [
     # admin
     path('admin/', admin.site.urls),
     # book
-    path('',include('book.urls')),
+    path('', include('book.urls')),
 
     # allauth
     path(
