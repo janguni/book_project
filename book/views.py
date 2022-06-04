@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
+from django import forms
 
 import book
 # from django.http import HttpResponse
@@ -125,35 +126,53 @@ class BookList(ListView):
 
 
 def bookDetail(request,book_isbn):
+    user = request.user
     book = Book.objects.get(book_isbn=book_isbn)
+
+    try:
+        wishlist = WishBookList.objects.get(user_id=user,book_id=book) 
+        overlap=True
+    except:
+        overlap=False
+
 
     return render(
         request,
         'book/book_detail.html',
         {
             'book': book,
+            'wishList': WishBookList,
+            'overlap' : overlap
         }
     )
 
 
-def addWishList(request,book_isbn):
-    user= request.user
+def addWishList(request, book_isbn):
+    user = request.user
     book = Book.objects.get(book_isbn=book_isbn)
-    wish_book = WishBookList(user_id=user, book_id=book)
-    WishBookList.save(wish_book)
+    if request.POST.get('wish-cancle') == None:
+        wish_book = WishBookList(user_id=user, book_id=book)
+        WishBookList.save(wish_book)
+        overlap=True
+
+    else:
+        wish_list = WishBookList.objects.get(user_id=user, book_id=book)
+        wish_list.delete()
+        overlap=False
+
     
     return render(
         request,
         'book/book_detail.html',
         {
             'book': book,
+            'overlap': overlap
         }
     )
 
 def wishListView(request):
     user = request.user
     user_wishList = WishBookList.objects.filter(user_id=user)
-
 
 
     return render(
