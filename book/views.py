@@ -131,9 +131,9 @@ def bookDetail(request,book_isbn):
 
     try:
         wishlist = WishBookList.objects.get(user_id=user,book_id=book) 
-        overlap=True
+        wished=True
     except:
-        overlap=False
+        wished=False
 
 
     return render(
@@ -142,7 +142,7 @@ def bookDetail(request,book_isbn):
         {
             'book': book,
             'wishList': WishBookList,
-            'overlap' : overlap
+            'wished' : wished
         }
     )
 
@@ -150,15 +150,18 @@ def bookDetail(request,book_isbn):
 def addWishList(request, book_isbn):
     user = request.user
     book = Book.objects.get(book_isbn=book_isbn)
+
+    # 위시리스트 추가
     if request.POST.get('wish-cancle') == None:
         wish_book = WishBookList(user_id=user, book_id=book)
         WishBookList.save(wish_book)
-        overlap=True
+        wished=True
 
+    # 위시리스트 취소
     else:
         wish_list = WishBookList.objects.get(user_id=user, book_id=book)
         wish_list.delete()
-        overlap=False
+        wished=False
 
     
     return render(
@@ -166,7 +169,7 @@ def addWishList(request, book_isbn):
         'book/book_detail.html',
         {
             'book': book,
-            'overlap': overlap
+            'wished': wished
         }
     )
 
