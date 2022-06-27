@@ -18,7 +18,7 @@
 
         <form action="{% url 'like-book' book.book_isbn %}" method='POST'>
             {% csrf_token %}
-            {% if overlap %}
+            {% if wished %}
             <input type="submit" value='좋아요 취소' name="wish-cancle">
             {% else %}
             <input type="submit" value='좋아요' name="wish-add">
