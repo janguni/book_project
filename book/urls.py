@@ -11,7 +11,13 @@ urlpatterns = [
     path('set-profile/',views.ProfileSetView.as_view(),name='profile-set'),
     path('edit-profile/',views.ProfileUpdateView.as_view(),name='profile-update'),
     path('wishList-profile/', views.wishListView, name='profile-wishList'),
-   
+
+    # review
+    path('reviews/<int:review_id>/', views.ReviewDetailView.as_view(), name='review-detail'),
+    path('reviews/new/', views.ReviewCreateView.as_view(), name='review-create'),
+    path('reviews/<int:review_id>/edit/', views.ReviewUpdateView.as_view(), name='review-update'),
+    path('reviews/<int:review_id>/delete/', views.ReviewDeleteView.as_view(), name='review-delete'),
+
     # account
     path('login/', views.loginview, name='login'),
     path('signup/', views.signup, name='signup'),

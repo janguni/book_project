@@ -1,23 +1,17 @@
-import csv
-from re import template
-import pandas as pd
 from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
-from django import forms
 
-import book
-# from django.http import HttpResponse
-# from django.contrib.auth.hashers import make_password
 from .forms import SignupForm
 from django.views.generic import(
-    DetailView,UpdateView,ListView
+    DetailView, UpdateView, ListView, CreateView, DeleteView
 )
-from book.forms import ProfileForm
-from braces.views import LoginRequiredMixin
+from book.forms import ProfileForm, ReviewForm
+from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User, Book, WishBookList
+from book.models import User, Book, WishBookList, Review, Tag
+from book.functions import confirmation_required_redirect
 
 
 # with open('./bookList.csv','r',encoding="UTF-8") as f:
@@ -186,3 +180,71 @@ def wishListView(request):
         }
     )
 
+
+# review
+class ReviewListView(ListView):
+    model = Review
+    ordering = '-pk'
+
+
+class ReviewDetailView(DetailView):
+    model = Review
+    template_name = 'review/review_detail.html'
+    pk_url_kwarg = 'review_id'
+
+
+class ReviewCreateView(LoginRequiredMixin, CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'review/review_form.html'
+
+    redirect_unauthenticated_users = True
+    raise_exception = confirmation_required_redirect
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("review-detail", kwargs={"review_id": self.object.id})
+
+
+class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'review/review_form.html'
+    pk_url_kwarg = 'review_id'
+
+    raise_exception = True
+    redirect_unauthenticated_users = False
+
+    def get_success_url(self):
+        return reverse("review-detail", kwargs={"review_id": self.object.id})
+
+    def test_func(self, user):
+        review = self.get_object()
+        if review.author == user:
+            return True
+        else:
+            return False
+
+        # or 그냥 return review.author == user
+
+
+class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Review
+    template_name = 'review/review_confirm_delete.html'
+    pk_url_kwarg = 'review_id'
+
+    raise_exception = True
+    redirect_unauthenticated_users = False
+
+    def get_success_url(self):
+        return reverse('main')
+
+    def test_func(self, user):
+        review = self.get_object()
+        if review.author == user:
+            return True
+        else:
+            return False
