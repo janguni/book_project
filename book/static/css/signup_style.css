@@ -10,8 +10,9 @@
    position: absolute;
    top: 50px;
    right: 30px;
+   font-size: 16px;
+   font-weight: 500;
    color: #363864;
-   text-decoration-line: none;
    
 }
 
