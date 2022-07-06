@@ -167,84 +167,28 @@ def addWishList(request, book_isbn):
         }
     )
 
-def wishListView(request):
-    user = request.user
-    user_wishList = WishBookList.objects.filter(user_id=user)
+# def wishListView(request):
+#     user = request.user
+#     user_wishList = WishBookList.objects.filter(user_id=user)
 
 
-    return render(
-        request,
-        'profile/profile_wishList.html',
-        {
-            'wishList' : user_wishList
-        }
-    )
+#     return render(
+#         request,
+#         'profile/profile_wishList.html',
+#         {
+#             'wishList' : user_wishList
+#         }
+#     )
 
-
-# review
-class ReviewListView(ListView):
-    model = Review
+class WishList(ListView):
+    model = Book
     ordering = '-pk'
+    paginate_by = 5
 
+    template_name = 'profile/profile_wishList.html'
 
-class ReviewDetailView(DetailView):
-    model = Review
-    template_name = 'review/review_detail.html'
-    pk_url_kwarg = 'review_id'
-
-
-class ReviewCreateView(LoginRequiredMixin, CreateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'review/review_form.html'
-
-    redirect_unauthenticated_users = True
-    raise_exception = confirmation_required_redirect
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse("review-detail", kwargs={"review_id": self.object.id})
-
-
-class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'review/review_form.html'
-    pk_url_kwarg = 'review_id'
-
-    raise_exception = True
-    redirect_unauthenticated_users = False
-
-    def get_success_url(self):
-        return reverse("review-detail", kwargs={"review_id": self.object.id})
-
-    def test_func(self, user):
-        review = self.get_object()
-        if review.author == user:
-            return True
-        else:
-            return False
-
-        # or 그냥 return review.author == user
-
-
-class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Review
-    template_name = 'review/review_confirm_delete.html'
-    pk_url_kwarg = 'review_id'
-
-    raise_exception = True
-    redirect_unauthenticated_users = False
-
-    def get_success_url(self):
-        return reverse('main')
-
-    def test_func(self, user):
-        review = self.get_object()
-        if review.author == user:
-            return True
-        else:
-            return False
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #user_id = self.kwargs.get('user_id')
+        context['wishList'] = WishBookList.objects.filter(user_id=self.request.user)
+        return context

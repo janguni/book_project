@@ -48,7 +48,10 @@ class WishBookList(models.Model):
     #count = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'[{self.pk}] {self.user_id} like {self.book_id}'
+
+        return self.pk
+    
+
 
 
 class Review(models.Model):
@@ -85,3 +88,4 @@ class Tag(models.Model):
 
     def get_absolute_url(self):
         return f'/tag/{self.slug}'
+
