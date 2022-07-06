@@ -1,6 +1,4 @@
-from distutils.command.upload import upload
-from email.policy import default
-from pyexpat import model
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .validators import validate_no_special_characters
@@ -50,5 +48,44 @@ class WishBookList(models.Model):
     #count = models.PositiveIntegerField()
 
     def __str__(self):
+
         return self.pk
     
+
+
+
+class Review(models.Model):
+    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    review_context = models.TextField()
+    dt_created = models.DateTimeField(default=timezone.now)
+    dt_updated = models.DateTimeField(auto_now=True)
+    RATIMG_CHOICES = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+        (6, 6),
+        (7, 7),
+        (8, 8),
+        (9, 9),
+        (10, 10)
+    )
+    rating = models.IntegerField(choices=RATIMG_CHOICES, default=None)
+
+    def __str__(self):
+        return self.title
+
+
+class Tag(models.Model):
+    tag_name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=20, allow_unicode=True)
+
+    def __str__(self):
+        return self.tag_name
+
+    def get_absolute_url(self):
+        return f'/tag/{self.slug}'
+

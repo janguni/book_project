@@ -1,23 +1,30 @@
 {% extends 'book/base.html' %}
 {% load static %}
 {% block content %}
-<h1>회원가입</h1>
+
+<p>어서오세요</p>
+<div class="auth.link">
+    <a href="{% url 'login' %}" id = "login_link">로그인</a>
+</div>
+
 <hr>
+<h2>회원가입</h2>
+
 
 <form action="{% url 'signup' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
     <div class = "form-group">
-        <label for = "{{fied.id_for_label}}">{{field.label}}</label><br>
-        <input type = "{{field.field.widget.input_type}}" class = "form-control" id = "{{field.id_for_label}}"
+        <label for = "{{fied.id_for_label}}">{{field.label}}</label><input type = "{{field.field.widget.input_type}}" class = "form-control" id = "{{field.id_for_label}}"
         placeholder = "{{field.label}}" name = "{{field.name}}">
     </div>
     {% if field.errors %}
+    <br>
     <span style = "color:red">{{field.errors}}</span>
     {% endif %}
     {% endfor %}
     <br>
-    <button type = "submit" class = "btn btn-primary">회원가입</button> 
+    <button type = "submit" class = "btn btn-primary">회원가입 완료</button> 
 </form>
 
 <!-- <form action="{% url 'signup' %}" method="post">
@@ -28,7 +35,5 @@
 
 </form> -->
 
-<div class="auth.link">
-    <a href="{% url 'login' %}">Login</a>
-</div>
 {% endblock content %}
+

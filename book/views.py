@@ -1,23 +1,17 @@
-import csv
-from re import template
-import pandas as pd
 from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
-from django import forms
 
-import book
-# from django.http import HttpResponse
-# from django.contrib.auth.hashers import make_password
 from .forms import SignupForm
 from django.views.generic import(
-    DetailView,UpdateView,ListView
+    DetailView, UpdateView, ListView, CreateView, DeleteView
 )
-from book.forms import ProfileForm
-from braces.views import LoginRequiredMixin
+from book.forms import ProfileForm, ReviewForm
+from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User, Book, WishBookList
+from book.models import User, Book, WishBookList, Review, Tag
+from book.functions import confirmation_required_redirect
 
 
 # with open('./bookList.csv','r',encoding="UTF-8") as f:
