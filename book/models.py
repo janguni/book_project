@@ -50,6 +50,5 @@ class WishBookList(models.Model):
     #count = models.PositiveIntegerField()
 
     def __str__(self):
-        return f'[{self.pk}] {self.user_id} like {self.book_id}'
-    
+        return self.pk
     

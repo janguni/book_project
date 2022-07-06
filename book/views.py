@@ -173,16 +173,28 @@ def addWishList(request, book_isbn):
         }
     )
 
-def wishListView(request):
-    user = request.user
-    user_wishList = WishBookList.objects.filter(user_id=user)
+# def wishListView(request):
+#     user = request.user
+#     user_wishList = WishBookList.objects.filter(user_id=user)
 
 
-    return render(
-        request,
-        'profile/profile_wishList.html',
-        {
-            'wishList' : user_wishList
-        }
-    )
+#     return render(
+#         request,
+#         'profile/profile_wishList.html',
+#         {
+#             'wishList' : user_wishList
+#         }
+#     )
 
+class WishList(ListView):
+    model = Book
+    ordering = '-pk'
+    paginate_by = 5
+
+    template_name = 'profile/profile_wishList.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #user_id = self.kwargs.get('user_id')
+        context['wishList'] = WishBookList.objects.filter(user_id=self.request.user)
+        return context
