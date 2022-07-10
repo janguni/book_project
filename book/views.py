@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
@@ -102,16 +103,31 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView) :
     def get_success_url(self):
         return reverse('profile',kwargs=({'user_id':self.request.user.id})) 
 
+# 검색 기능
 def search(request) :
     if request.method == "GET":
-        searchKey = request.GET['q']
+        search_key = request.GET['q']
+        option_select = request.GET.getlist('option_select',None)
+        
+        if 'all' in option_select :
+            search_books = Book.objects.filter(Q(book_title__icontains = search_key) | Q(book_publisher__icontains = search_key) | Q(book_author__icontains = search_key) | Q(genre_name__icontains = search_key))
 
-        search_books = Book.objects.filter(Q(book_title__icontains = searchKey))
+        elif 'title' in option_select :
+            search_books = Book.objects.filter(Q(book_title__icontains = search_key))
 
-        return render(request,'book/search.html', {'search_books': search_books})
- 
+        elif 'author' in option_select :
+            search_books = Book.objects.filter(Q(book_author__icontains = search_key))
+
+        elif 'publisher' in option_select :
+            search_books = Book.objects.filter(Q(book_publisher__icontains = search_key))
+
+        elif 'genre' in option_select :
+            search_books = Book.objects.filter(Q(genre_name__icontains = search_key))
+
+        return render(request,'book/search.html', {'search_books': search_books, 'search_key': search_key})
+    
     else:
-        return render(request, 'book/main.html') 
+        return render(request, 'book/main.html')
 
 
 class BookList(ListView):
