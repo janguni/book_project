@@ -1,19 +1,22 @@
-from django import forms
 from .models import User
 from django.contrib.auth.hashers import check_password
+from django import forms
 from .models import User, Review
 
 
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
+
         fields = [
+            "author",
             "title",
             "book",
             "review_context",
             "rating",
 
-        ]
+            ]
+
         widgets = {
             "rating": forms.Select,
         }
@@ -26,7 +29,7 @@ class ProfileForm(forms.ModelForm):
             'profile_pic',
             'intro',
         ]
-        Widgets = {
+        widgets = {
             'intro' : forms.Textarea,
         }
 

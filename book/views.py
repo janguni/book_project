@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
-
+from random import *
 from .forms import SignupForm
 from django.views.generic import(
     DetailView, UpdateView, ListView, CreateView, DeleteView
@@ -12,17 +12,6 @@ from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.views import PasswordChangeView
 from book.models import User, Book, WishBookList, Review, Tag
 from book.functions import confirmation_required_redirect
-
-
-# with open('./bookList.csv','r',encoding="UTF-8") as f:
-#     dr = csv.DictReader(f)
-#     s = pd.DataFrame(dr)
-# ss = []
-# for i in range(len(s)):
-#     st = (s['book_isbn'][i], s['book_img_url'][i], s['book_title'][i],s['book_author'][i],s['book_publisher'][i],s['genre_name'][i])
-#     ss.append(st)
-# for i in range(len(s)):
-#     Book.objects.create(book_isbn=ss[i][0], book_img_url=ss[i][1], book_title=ss[i][2],book_author=ss[i][3],book_publisher=ss[i][4],genre_name=ss[i][5])
 
 
 # main
@@ -98,9 +87,11 @@ class ProfileUpdateView(LoginRequiredMixin,UpdateView):
     def get_success_url(self):
         return reverse('profile',kwargs=({'user_id':self.request.user.id}))
 
+
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView) :
     def get_success_url(self):
         return reverse('profile',kwargs=({'user_id':self.request.user.id})) 
+
 
 def search(request) :
     if request.method == "GET":
@@ -139,6 +130,10 @@ def bookDetail(request,book_isbn):
             'wished' : wished
         }
     )
+
+
+
+
 
 
 def addWishList(request, book_isbn):
@@ -227,8 +222,6 @@ class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         else:
             return False
-
-        # or 그냥 return review.author == user
 
 
 class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):

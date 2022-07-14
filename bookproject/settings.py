@@ -85,42 +85,6 @@ TEMPLATES = [
 ]
 
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'google': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': '735662342007-legph5apft0e811p7h0n0dmn13j4v3v2.apps.googleusercontent.com',
-#             'secret': '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',
-#             'key': ''
-#         }
-#     },
-
-#     'naver': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': 'JK4m8aXNTaDjOPCcODBc',
-#             'secret': 'dUa2ScjgNV',
-#             'key': ''
-#         }
-#     },
-
-    
-#     'kakao': {
-#         # For each OAuth based provider, either add a ``SocialApp``
-#         # (``socialaccount`` app) containing the required client
-#         # credentials, or list them here:
-#         'APP': {
-#             'client_id': 'cac752c22b7f5af489f9d3724056cb54',
-#             'secret': '',
-#             'key': ''
-#         }
-#     },
-# }
-
 WSGI_APPLICATION = 'bookproject.wsgi.application'
 
 
@@ -162,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
