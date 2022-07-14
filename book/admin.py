@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from import_export.admin import ImportExportMixin
-from .models import User, Book,WishBookList
+from .models import Genre, User, Book,WishBookList
 # Register your models here.
 
 class BookAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -11,3 +11,4 @@ UserAdmin.fieldsets += (("Custom fields",{"fields":("nickname","profile_pic","in
 admin.site.register(User,UserAdmin)
 admin.site.register(Book,BookAdmin)
 admin.site.register(WishBookList)
+admin.site.register(Genre)

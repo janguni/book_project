@@ -11,7 +11,7 @@ from django.views.generic import(
 from book.forms import ProfileForm, ReviewForm
 from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.views import PasswordChangeView
-from book.models import User, Book, WishBookList, Review, Tag
+from book.models import Genre, User, Book, WishBookList, Review, Tag
 from book.functions import confirmation_required_redirect
 
 
@@ -118,6 +118,29 @@ def search(request) :
     
     else:
         return render(request, 'book/main.html')
+
+
+# 장르선택
+class GenreList(ListView):
+    model = Genre
+    template_name = 'book/select_genre.html'
+
+
+def SelectedGenreList(request, genre_id):
+
+    genre = Genre.objects.get(id=genre_id)
+    book_list = Book.objects.filter(genre_name=genre.genre_name)
+
+    return render(
+        request,
+        'book/selected_genre.html',
+        {
+            'book_list': book_list,
+            'genre_name': genre.genre_name
+        }
+    )
+
+
 
 
 class BookList(ListView):

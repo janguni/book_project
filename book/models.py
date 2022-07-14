@@ -87,3 +87,11 @@ class Tag(models.Model):
     def get_absolute_url(self):
         return f'/tag/{self.slug}'
 
+
+class Genre(models.Model):
+    #genre_id = models.IntegerField
+    genre_name = models.CharField(max_length=50)
+
+    def get_absolute_url(self):
+        return f'/select_genre/{self.pk}'
+

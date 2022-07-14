@@ -24,6 +24,9 @@ urlpatterns = [
 
     path('search/', views.search, name='search'),  
     
+    path('select_genre/', views.GenreList.as_view(), name='select-genre'),
+    path('select_genre/<int:genre_id>', views.SelectedGenreList, name='selectd-genre'),
+    
     path('book/list', views.BookList.as_view()),
     path('book/<int:book_isbn>/', views.bookDetail),
     path('book/like/<int:book_isbn>/', views.addWishList, name='like-book')
