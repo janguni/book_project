@@ -1,0 +1,10 @@
+{% extends 'book/base.html' %}
+{% block content %}
+<h1>장르 선택</h1>
+    <ul>
+        {% for g in genre_list %}
+        <li><a href="{{g.get_absolute_url}}">{{ g.genre_name }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

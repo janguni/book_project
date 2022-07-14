@@ -11,6 +11,7 @@
             <a href="{% url 'profile' user.id %}">내 프로필 </a>
             <a href="{% url 'account_logout' %}">로그아웃</a>
             <a href="{% url 'review-create' %}"> 리뷰 작성 </a>
+            
         {% else %}
             <p> 로그아웃된 상태입니다.</p>
             <a href="{% url 'login' %}">로그인</a>
@@ -33,6 +34,12 @@
             </select>
             <input type="search" name="q" placeholder="Search">
             <input type="submit" value="검색"> 
+        </form>
+    </div>
+
+    <div class="selectGenre">
+        <form action="{% url 'select-genre' %}" method="GET">
+            <input type="submit" value='장르별 책 선택하기'>
         </form>
     </div>
     
