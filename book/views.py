@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login
 from random import *
-from .forms import SignupForm
+# from .forms import SignupForm
+from .forms import UserForm
 from django.views.generic import(
     DetailView, UpdateView, ListView, CreateView, DeleteView
 )
@@ -20,16 +21,17 @@ def main(request):
     return render(request,'book/main.html')
 
 # account/signup
-def signup(request) : 
+def signup(request) :
     if request.method == 'GET' :
-        form = SignupForm()
-   
-    elif request.method == 'POST' :
-        form = SignupForm(request.POST)
-        if form.is_valid() :
-            user = form.save(commit = False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
+        form = UserForm()
+
+    elif request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)  # 사용자 인증
             return render(request, 'account/signup_success.html')
     return render(request, 'account/signup.html', {'form': form})
 
