@@ -8,11 +8,11 @@ class User(AbstractUser):
         max_length=15,
         unique=True,
         null=True,
-        error_messages={'unique':'이미 사용중인 닉넥임입니다'},
-        verbose_name="별명",
+        error_messages={'unique':'이미 사용중인 닉네임입니다'},
+        verbose_name="닉네임",
     )
 
-    email = models.CharField(max_length = 128, verbose_name="이메일")
+    email = models.EmailField(max_length = 128, verbose_name="이메일")
     password = models.CharField(max_length = 65, verbose_name = "비밀번호")
     profile_pic = models.ImageField(default="default_profile_pic.jpg",upload_to="profile_pics")
     intro = models.CharField(max_length=60,blank=True)
