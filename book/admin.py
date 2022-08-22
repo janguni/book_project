@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from import_export.admin import ImportExportMixin
-from .models import Genre, User, Book,WishBookList
+from .models import Genre, User, Book, WishBookList, Review
 # Register your models here.
 
 class BookAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -12,3 +12,4 @@ admin.site.register(User,UserAdmin)
 admin.site.register(Book,BookAdmin)
 admin.site.register(WishBookList)
 admin.site.register(Genre)
+admin.site.register(Review)

@@ -53,9 +53,9 @@ class WishBookList(models.Model):
 
 
 class Review(models.Model):
-    author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    author = models.ForeignKey("User", null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey("Book", on_delete=models.CASCADE)
     review_context = models.TextField()
     dt_created = models.DateTimeField(default=timezone.now)
     dt_updated = models.DateTimeField(auto_now=True)
