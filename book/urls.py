@@ -31,5 +31,5 @@ urlpatterns = [
     path('book/<int:book_isbn>/', views.bookDetail),
     path('book/like/<int:book_isbn>/', views.addWishList, name='like-book'),
 
-    path('random/', views.get_random, name='book-random'),
+    #path('random/', views.get_random, name='book-random'),
 ]
