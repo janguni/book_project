@@ -1,11 +1,10 @@
 from multiprocessing import context
-from django.db.models import Q
+from django.db.models import Q, Max
 from django.urls import reverse
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from random import *
 from .forms import SignupForm
-from django.views.generic import(
+from django.views.generic import (
     DetailView, UpdateView, ListView, CreateView, DeleteView
 )
 from book.forms import ProfileForm, ReviewForm
@@ -13,45 +12,65 @@ from braces.views import LoginRequiredMixin, UserPassesTestMixin
 from allauth.account.views import PasswordChangeView
 from book.models import Genre, User, Book, WishBookList, Review, Tag
 from book.functions import confirmation_required_redirect
+from random import *
+import random
+
+
+
+def get_random(request):
+    # max_id = Book.objects.all().aggregate(max_id=Max("id"))['max_id']
+    # while True:
+    #     pk = random.randint(1, max_id)
+    #     book = Book.objects.filter(pk=pk).first()
+    #     if book:
+    #         return book
+    num = randrange(0,49)
+    book1 = Book.objects.filter(genre_name='컴퓨터/모바일')[:50]
+    random1 = book1[num]
+
+    return render(request, 'book/random.html',{'random1':random1})
 
 
 # main
 def main(request):
-    return render(request,'book/main.html')
+    return render(request, 'book/main.html')
+
 
 # account/signup
-def signup(request) : 
-    if request.method == 'GET' :
+def signup(request):
+    if request.method == 'GET':
         form = SignupForm()
-   
-    elif request.method == 'POST' :
+
+    elif request.method == 'POST':
         form = SignupForm(request.POST)
-        if form.is_valid() :
-            user = form.save(commit = False)
+        if form.is_valid():
+            user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
             return render(request, 'account/signup_success.html')
     return render(request, 'account/signup.html', {'form': form})
 
-# account/login    
-def loginview(request) :
-    if request.method == 'GET' :
-            return render(request, 'account/login.html')
 
-    elif request.method == 'POST' :
+# account/login
+def loginview(request):
+    if request.method == 'GET':
+        return render(request, 'account/login.html')
+
+    elif request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        
-        if user is not None :
+
+        if user is not None:
             login(request, user)
             # 로그인 성공
             return render(request, 'book/main.html')
-        else :
+        else:
             # 로그인 실패
             return render(request, 'account/login.html', {'error': '아이디 또는 비밀번호를 확인하세요!'})
-    else : 
+    else:
         return render(request, 'account/login.html')
+
 
 # profile
 class ProfileView(DetailView):
@@ -60,62 +79,66 @@ class ProfileView(DetailView):
     pk_url_kwarg = 'user_id'
     context_object_name = 'profile_user'
 
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs.get('user_id')
-       
+
         return context
 
-class ProfileSetView(LoginRequiredMixin,UpdateView):
+
+class ProfileSetView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = ProfileForm
     template_name = 'profile/profile_set_form.html'
 
     def get_object(self, queryset=None):
         return self.request.user
-    
-    def get_success_url(self) :
+
+    def get_success_url(self):
         return reverse('main')
 
-class ProfileUpdateView(LoginRequiredMixin,UpdateView):
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = ProfileForm
     template_name = 'profile/profile_update_form.html'
 
-    def get_object(self, queryset= None):
+    def get_object(self, queryset=None):
         return self.request.user
-    
+
     def get_success_url(self):
-        return reverse('profile',kwargs=({'user_id':self.request.user.id}))
+        return reverse('profile', kwargs=({'user_id': self.request.user.id}))
 
 
-class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView) :
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     def get_success_url(self):
-        return reverse('profile',kwargs=({'user_id':self.request.user.id})) 
+        return reverse('profile', kwargs=({'user_id': self.request.user.id}))
 
 
-def search(request) :
+def search(request):
     if request.method == "GET":
         search_key = request.GET['q']
-        option_select = request.GET.getlist('option_select',None)
-        
-        if 'all' in option_select :
-            search_books = Book.objects.filter(Q(book_title__icontains = search_key) | Q(book_publisher__icontains = search_key) | Q(book_author__icontains = search_key) | Q(genre_name__icontains = search_key))
+        option_select = request.GET.getlist('option_select', None)
 
-        elif 'title' in option_select :
-            search_books = Book.objects.filter(Q(book_title__icontains = search_key))
+        if 'all' in option_select:
+            search_books = Book.objects.filter(
+                Q(book_title__icontains=search_key) | Q(book_publisher__icontains=search_key) | Q(
+                    book_author__icontains=search_key) | Q(genre_name__icontains=search_key))
 
-        elif 'author' in option_select :
-            search_books = Book.objects.filter(Q(book_author__icontains = search_key))
+        elif 'title' in option_select:
+            search_books = Book.objects.filter(Q(book_title__icontains=search_key))
 
-        elif 'publisher' in option_select :
-            search_books = Book.objects.filter(Q(book_publisher__icontains = search_key))
+        elif 'author' in option_select:
+            search_books = Book.objects.filter(Q(book_author__icontains=search_key))
 
-        elif 'genre' in option_select :
-            search_books = Book.objects.filter(Q(genre_name__icontains = search_key))
+        elif 'publisher' in option_select:
+            search_books = Book.objects.filter(Q(book_publisher__icontains=search_key))
 
-        return render(request,'book/search.html', {'search_books': search_books, 'search_key': search_key})
-    
+        elif 'genre' in option_select:
+            search_books = Book.objects.filter(Q(genre_name__icontains=search_key))
+
+        return render(request, 'book/search.html', {'search_books': search_books, 'search_key': search_key})
+
     else:
         return render(request, 'book/main.html')
 
@@ -127,7 +150,6 @@ class GenreList(ListView):
 
 
 def SelectedGenreList(request, genre_id):
-
     genre = Genre.objects.get(id=genre_id)
     book_list = Book.objects.filter(genre_name=genre.genre_name)
 
@@ -141,23 +163,20 @@ def SelectedGenreList(request, genre_id):
     )
 
 
-
-
 class BookList(ListView):
     model = Book
     template_name = 'book/book_list.html'
 
 
-def bookDetail(request,book_isbn):
+def bookDetail(request, book_isbn):
     user = request.user
     book = Book.objects.get(book_isbn=book_isbn)
 
     try:
-        wishlist = WishBookList.objects.get(user_id=user,book_id=book) 
-        wished=True
+        wishlist = WishBookList.objects.get(user_id=user, book_id=book)
+        wished = True
     except:
-        wished=False
-
+        wished = False
 
     return render(
         request,
@@ -165,13 +184,9 @@ def bookDetail(request,book_isbn):
         {
             'book': book,
             'wishList': WishBookList,
-            'wished' : wished
+            'wished': wished
         }
     )
-
-
-
-
 
 
 def addWishList(request, book_isbn):
@@ -182,15 +197,14 @@ def addWishList(request, book_isbn):
     if request.POST.get('wish-cancle') == None:
         wish_book = WishBookList(user_id=user, book_id=book)
         WishBookList.save(wish_book)
-        wished=True
+        wished = True
 
     # 위시리스트 취소
     else:
         wish_list = WishBookList.objects.get(user_id=user, book_id=book)
         wish_list.delete()
-        wished=False
+        wished = False
 
-    
     return render(
         request,
         'book/book_detail.html',
@@ -199,6 +213,7 @@ def addWishList(request, book_isbn):
             'wished': wished
         }
     )
+
 
 # def wishListView(request):
 #     user = request.user
@@ -220,10 +235,9 @@ class WishList(ListView):
 
     template_name = 'profile/profile_wishList.html'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #user_id = self.kwargs.get('user_id')
+        # user_id = self.kwargs.get('user_id')
         context['wishList'] = WishBookList.objects.filter(user_id=self.request.user)
         return context
 
@@ -288,4 +302,3 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         else:
             return False
-

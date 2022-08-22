@@ -9,7 +9,6 @@ class ReviewForm(forms.ModelForm):
         model = Review
 
         fields = [
-            "author",
             "title",
             "book",
             "review_context",
@@ -20,6 +19,7 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             "rating": forms.Select,
         }
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
