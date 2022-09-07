@@ -21,21 +21,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-<<<<<<< HEAD
-
-class Book(models.Model):
-    id = models.IntegerField(primary_key=True)
-    img = models.CharField(max_length=128)
-    title = models.CharField(max_length=50)
-    author = models.CharField(max_length=20)
-    publisher = models.CharField(max_length=20)
-    genre = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.title
-=======
-    
-
 class Book(models.Model):
     book_isbn = models.CharField(max_length=200)
     book_img_url = models.URLField()
@@ -108,4 +93,3 @@ class Genre(models.Model):
     def get_absolute_url(self):
         return f'/select_genre/{self.pk}'
 
->>>>>>> upstream/master
