@@ -12,6 +12,7 @@ class User(AbstractUser):
         verbose_name="닉네임",
     )
 
+
     email = models.EmailField(max_length = 128, verbose_name="이메일")
     password = models.CharField(max_length = 65, verbose_name = "비밀번호")
     profile_pic = models.ImageField(default="default_profile_pic.jpg",upload_to="profile_pics")
@@ -28,6 +29,10 @@ class Book(models.Model):
     book_author = models.CharField(max_length=100)
     book_publisher = models.CharField(max_length=100)
     genre_name = models.CharField(max_length=50)
+    book_date = models.CharField(max_length=20, default='')
+    book_page = models.IntegerField(null=True)
+    book_plot = models.CharField(max_length=2000, default='')
+    book_cleaned = models.CharField(max_length=2000, default='')
 
 
     class Meta:
