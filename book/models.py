@@ -30,13 +30,13 @@ class Book(models.Model):
     book_publisher = models.CharField(max_length=100)
     genre_name = models.CharField(max_length=50)
     book_date = models.CharField(max_length=20, default='')
-    book_page = models.IntegerField(null=True)
     book_plot = models.CharField(max_length=2000, default='')
+    book_page = models.IntegerField(null=True)
     book_cleaned = models.CharField(max_length=2000, default='')
 
 
     class Meta:
-        db_table = 'bookList.csv'
+        db_table = 'new_bookdata.xlsx'
 
     def get_absolute_url(self):
         return f'/book/{self.book_isbn}/'
