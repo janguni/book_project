@@ -1,4 +1,4 @@
 migrations/
-book/__pycache__
-bookproject/__pycache__
+book/__pycache__/
+bookproject/__pycache__/
 *.DS_Store

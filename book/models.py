@@ -24,19 +24,18 @@ class User(AbstractUser):
 
 class Book(models.Model):
     book_isbn = models.CharField(max_length=200)
-    book_img_url = models.URLField()
     book_title = models.CharField(max_length=255)
-    book_author = models.CharField(max_length=100)
+    book_author = models.CharField(max_length=100,null=True)
     book_publisher = models.CharField(max_length=100)
-    genre_name = models.CharField(max_length=50)
     book_date = models.CharField(max_length=20, default='')
-    book_plot = models.CharField(max_length=2000, default='')
+    book_img_url = models.URLField()
     book_page = models.IntegerField(null=True)
-    book_cleaned = models.CharField(max_length=2000, default='')
+    genre_name = models.CharField(max_length=50)
+    book_plot = models.CharField(max_length=2000, default='')
 
 
     class Meta:
-        db_table = 'new_bookdata.xlsx'
+        db_table = 'book_list_v2.xlsx'
 
     def get_absolute_url(self):
         return f'/book/{self.book_isbn}/'
@@ -97,4 +96,7 @@ class Genre(models.Model):
 
     def get_absolute_url(self):
         return f'/select_genre/{self.pk}'
+    
+    def __str__(self):
+        return self.genre_name
 
